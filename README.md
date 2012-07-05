@@ -50,6 +50,46 @@ Example 2: A completely unattended submission
 Example 3: A remote submission to a CycleServer on another machine
 
 	cycle_submit.py --host cycleserver.mydomain.com:8080 my.sub
+
+## Bundling for Windows
+
+You can create a standalone executable to use on Windows machines where a full Python implementation does not exist. The `setup.py` file and `build.bat` contain all the necessary information to use [py2exe][] to create a `cycle_submit.exe` executable that will run without a full Python installation on any Windows machine. Install [py2exe][] and then build `cycle_submit.exe` like so:
+
+    Z:\code\cycle-submit>.\build.bat
+	Could Not Find Z:\code\cycle-submit\cycle_submit.exe
+	running py2exe
+	creating Z:\code\cycle-submit\build
+	creating Z:\code\cycle-submit\build\bdist.win32
+	creating Z:\code\cycle-submit\build\bdist.win32\winexe
+	creating Z:\code\cycle-submit\build\bdist.win32\winexe\collect-2.7
+	creating Z:\code\cycle-submit\build\bdist.win32\winexe\bundle-2.7
+	creating Z:\code\cycle-submit\build\bdist.win32\winexe\temp
+	creating Z:\code\cycle-submit\dist
+	*** searching for required modules ***
+	*** parsing results ***
+	*** finding dlls needed ***
+	*** create binaries ***
+	*** byte compile python files ***
+	<snip>
+	*** binary dependencies ***
+	Your executable(s) also depend on these dlls which are not included,
+	you may or may not need to distribute them.
+
+	Make sure you have the license if you distribute any of them, and
+	make sure you don't distribute files belonging to the operating system.
+
+	   WS2_32.dll - C:\Windows\system32\WS2_32.dll
+	   SHELL32.dll - C:\Windows\system32\SHELL32.dll
+	   USER32.dll - C:\Windows\system32\USER32.dll
+	   ADVAPI32.dll - C:\Windows\system32\ADVAPI32.dll
+	   KERNEL32.dll - C:\Windows\system32\KERNEL32.dll
+	        1 file(s) moved.
+
+
+	cycle_submit.exe has been built successfully
+
+	Z:\code\cycle-submit>.\cycle_submit.exe --version
+	.\cycle_submit.exe v1.0
 	
 ## See Also
 
@@ -71,3 +111,4 @@ Unless required by applicable law or agreed to in writing, software distributed 
 [cycleserver]:http://www.cyclecomputing.com/cycleserver/overview
 [condor]:http://www.uwisc.cs.edu/condor
 [curl]:http://curl.haxx.se/
+[py2exe]:http://www.py2exe.org/

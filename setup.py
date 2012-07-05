@@ -11,7 +11,7 @@ setup(
             'optimize'      : 2,
             'ascii'         : 1,
             'bundle_files'  : 1,
-            'packages'      : ['encodings', 'os']}
+            'packages'      : ['encodings', 'os', 'xml']}
         },
     zipfile = None,
     console = ["cycle_submit.py"]

@@ -43,7 +43,7 @@ import sys
 import getpass
 import os
 from optparse import OptionParser
-import elementtree.ElementTree as ET
+import xml.etree.ElementTree as ET
 
 ################################################################################
 # GLOBALS
@@ -242,7 +242,7 @@ def submit_job(hostname, pool_id, username, group, submission_file):
 	return subid
 
 def main():
-    '''The main() routine that drives the script.'''
+	'''The main() routine that drives the script.'''
 	parser = define_option_parser()
 	(options, args) = parser.parse_args()
 
