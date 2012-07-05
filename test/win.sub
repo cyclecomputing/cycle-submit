@@ -1,0 +1,18 @@
+universe   = vanilla
+
+executable = c:\temp\sleeper\sleeper.exe
+# Sleep for a random amount of time: --seed=1 --min=60 --max=300
+# Sleep for a static amount of time: --min=3600 --max=3600
+arguments  = --min=3600 --max=3600
+
+requirements = OpSys != "Linux" && Arch =!= Undefined && Disk > 0 && Memory > 0
+run_as_owner = false
+
+output = $(cluster).$(process).out
+error  = $(cluster).$(process).err
+log    = $(cluster).log
+
+should_transfer_files   = yes
+when_to_transfer_output = on_exit
+
+queue 10
