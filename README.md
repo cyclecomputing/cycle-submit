@@ -12,6 +12,7 @@ It also serves as an example of how to use CycleServer's RESTful job submission 
 * -g | --group -- group name for the submission
 * --poolid -- pool ID to use for the submission
 * --host -- hostname and port where CycleServer is listening
+* -k | --insecure -- Do not verify SSL certificate
 * -v | --version -- print version information and exit
 
 ## Description

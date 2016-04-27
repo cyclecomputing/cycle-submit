@@ -148,7 +148,7 @@ def get_target(hostname):
 	TODO Don't just pick the first one. If >1 pool ask the user to choose.
 	'''
 	target = None
-	url = 'http://' + hostname + '/condor/submit/targets'
+	url = hostname + '/condor/submit/targets'
 	try:
 		pagehandle = urllib2.urlopen(url)
 	except urllib2.HTTPError, e:
@@ -190,6 +190,7 @@ def define_option_parser():
 	parser.add_option('-g', '--group', dest='group', help='Group name for submission')
 	parser.add_option('--poolid', dest='poolid', help='Pool ID for the target pool')
 	parser.add_option('--host', dest='hostname', default='localhost:8080', help='Host name or IP address of CycleServer instance')
+        parser.add_option('-k', '--insecure', dest='skip_host_check', default=False, action='store_true', help='Do not verify SSL certificate')
 	parser.add_option('-v', '--version', dest='version', default=False, action='store_true', help='Show version and exit')
 	return parser
 
@@ -211,7 +212,8 @@ def submit_job(hostname, pool_id, username, group, submission_file):
 	if group:
 		options['group'] = group
 
-	url = 'http://' + hostname + '/condor/submit/submission?' + urllib.urlencode(options)
+
+	url = hostname + '/condor/submit/submission?' + urllib.urlencode(options)
 	#url = 'http://' + hostname + '/condor/submit/submit_file?' + urllib.urlencode(options)
 	#print 'URL: '  + url
 
@@ -259,6 +261,10 @@ def main():
 		return 1
 	submission_file = args[0]
 
+        if options.skip_host_check:
+            import ssl
+            ssl._create_default_https_context = ssl._create_unverified_context
+
 	if not options.username:
 		username = None
 		while not username:
@@ -273,16 +279,20 @@ def main():
 	else:
 		password = options.password
 
+        if options.hostname.startswith('http'):
+            hostname = options.hostname
+        else:
+            hostname = 'http://' + options.hostname
 	# Authentication details for this domain
 	passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
-	passman.add_password(None, 'http://'+ options.hostname, username, password)
+	passman.add_password(None, hostname, username, password)
 	authhandler = urllib2.HTTPBasicAuthHandler(passman)
 	opener = urllib2.build_opener(authhandler)
 	urllib2.install_opener(opener)
 
 	# Get the first pool from the list of pools
 	if not options.poolid:
-		pool_id = get_target(options.hostname)
+		pool_id = get_target(hostname)
 	else:
 		pool_id = options.poolid
 	if not pool_id:
@@ -302,7 +312,7 @@ def main():
 		print '   Description     : ' + options.description
 
 	# Do the submission
-	subid = submit_job(options.hostname, pool_id, username, options.group, subfile_contents)
+	subid = submit_job(hostname, pool_id, username, options.group, subfile_contents)
 	if subid:
 		print ''
 		print 'Submission ' + subid + ' created successfully'
